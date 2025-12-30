@@ -1,0 +1,43 @@
+{
+  "name": "superconductor-plugin-marketplace",
+  "owner": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.dev"
+  },
+  "metadata": {
+    "description": "Official Superconductor plugin marketplace for Claude Code and other agents.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "Video Understanding",
+      "description": "Analyze and understand video content using Google Gemini. Supports local video files (mp4, mov, webm, avi, mkv) and YouTube links up to an hour long.",
+      "source": "./plugins/video-understanding"
+    },
+    {
+      "name": "Audio Understanding",
+      "description": "Transcribe and analyze audio content using Google Gemini. Supports local audio files (mp3, wav, m4a, ogg, flac) and YouTube links up to 9.5 hours long.",
+      "source": "./plugins/audio-understanding"
+    },
+    {
+      "name": "Image Generation",
+      "description": "Generate high-quality images from text descriptions using Google Gemini's image models. Can also use existing images or videos as reference for style guidance.",
+      "source": "./plugins/image-generation"
+    },
+    {
+      "name": "Video Generation",
+      "description": "Create 4-8 second videos from text prompts using Google Veo models. Supports image-to-video animation and native audio generation including dialogue and sound effects.",
+      "source": "./plugins/video-generation"
+    },
+    {
+      "name": "Text-to-Speech",
+      "description": "Convert text to natural-sounding speech using Google Gemini TTS models. Supports 30 different voices and 24 languages with automatic language detection.",
+      "source": "./plugins/text-to-speech"
+    },
+    {
+      "name": "Gemini Consultation",
+      "description": "Get a second opinion from Google Gemini AI. Useful for analyzing documents (PDFs up to 50MB), images, or getting Gemini's perspective on any topic.",
+      "source": "./plugins/gemini-consultation"
+    }
+  ]
+}

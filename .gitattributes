@@ -1,0 +1,2 @@
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+plugins/gemini/scripts/fixtures/*.json filter=lfs diff=lfs merge=lfs -text

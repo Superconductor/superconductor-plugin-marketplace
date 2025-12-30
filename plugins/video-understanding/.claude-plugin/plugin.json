@@ -1,0 +1,12 @@
+{
+  "name": "video-understanding",
+  "version": "1.0.0",
+  "description": "Analyze and understand video content using Google Gemini. Supports local video files (mp4, mov, webm, avi, mkv) and YouTube links up to an hour long.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.dev"
+  },
+  "homepage": "https://www.superconductor.dev",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["video", "youtube", "gemini", "analysis", "understanding"]
+}

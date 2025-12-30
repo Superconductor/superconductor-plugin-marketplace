@@ -1,0 +1,12 @@
+{
+  "name": "video-generation",
+  "version": "1.0.0",
+  "description": "Create 4-8 second videos from text prompts using Google Veo models. Supports image-to-video animation and native audio generation including dialogue and sound effects.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.dev"
+  },
+  "homepage": "https://www.superconductor.dev",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["video", "generation", "veo", "animation", "creative"]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "audio-understanding",
+  "version": "1.0.0",
+  "description": "Transcribe and analyze audio content using Google Gemini. Supports local audio files (mp3, wav, m4a, ogg, flac) and YouTube links up to 9.5 hours long.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.dev"
+  },
+  "homepage": "https://www.superconductor.dev",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["audio", "transcription", "youtube", "gemini", "podcast"]
+}

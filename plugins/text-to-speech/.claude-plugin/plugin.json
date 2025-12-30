@@ -1,0 +1,12 @@
+{
+  "name": "text-to-speech",
+  "version": "1.0.0",
+  "description": "Convert text to natural-sounding speech using Google Gemini TTS models. Supports 30 different voices and 24 languages with automatic language detection.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.dev"
+  },
+  "homepage": "https://www.superconductor.dev",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["tts", "speech", "voice", "audio", "narration"]
+}
