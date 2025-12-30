@@ -152,7 +152,7 @@ async function main() {
       "Error: GEMINI_API_KEY environment variable is not set.\n\n" +
         "To get an API key, visit: https://ai.google.dev/gemini-api/docs/api-key\n\n" +
         "Then set it in your environment:\n" +
-        "  export GEMINI_API_KEY='your-api-key'"
+        "  export GEMINI_API_KEY='your-api-key'",
     );
     process.exit(1);
   }
@@ -162,18 +162,16 @@ async function main() {
   if (!args.prompt) {
     console.error(
       "Error: No prompt provided.\n\n" +
-        "Usage: gemini.js [--model=MODEL] [--file=FILE] PROMPT\n\n" +
+        "Usage: main.js [--model=MODEL] [--file=FILE] PROMPT\n\n" +
         "Options:\n" +
         "  --model  Model to use (default: gemini-3-flash-preview)\n" +
-        "  --file   Local file path or YouTube URL"
+        "  --file   Local file path or YouTube URL",
     );
     process.exit(1);
   }
 
   const ai = new GoogleGenAI({});
-  const isImageModel = IMAGE_MODELS.some(
-    (m) => args.model.includes(m) || args.model.includes("-image")
-  );
+  const isImageModel = IMAGE_MODELS.some((m) => args.model.includes(m) || args.model.includes("-image"));
 
   let contents = [];
 
@@ -201,7 +199,7 @@ async function main() {
       if (!mimeType) {
         console.error(
           `Error: Unsupported file type: ${path.extname(filePath)}\n\n` +
-            `Supported types: ${Object.keys(MIME_TYPES).join(", ")}`
+            `Supported types: ${Object.keys(MIME_TYPES).join(", ")}`,
         );
         process.exit(1);
       }

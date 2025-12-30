@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "bin": {
-    "gemini": "./scripts/gemini.js"
+    "superconductor-gemini-skill": "./scripts/main.js"
   },
   "scripts": {
     "pretest": "npm install --silent",
-    "test": "node --test scripts/gemini.test.js"
+    "test": "node --test scripts/main.test.js"
   },
   "dependencies": {
     "@google/genai": "^1.0.0"

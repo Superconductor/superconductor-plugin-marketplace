@@ -6,7 +6,7 @@ import * as fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const scriptPath = path.join(__dirname, "gemini.js");
+const scriptPath = path.join(__dirname, "main.js");
 const sampleFilesDir = path.join(__dirname, "..", "..", "..", "..", "..", "tests", "sample-files");
 
 // Helper to run the script and capture output
@@ -29,7 +29,7 @@ function runScript(args, env = process.env) {
   });
 }
 
-describe("gemini.js CLI", () => {
+describe("script", () => {
   test("shows error when GEMINI_API_KEY is not set", async () => {
     const result = await runScript(["test prompt"], { GEMINI_API_KEY: "" });
 
@@ -62,7 +62,7 @@ describe("gemini.js CLI", () => {
   });
 });
 
-describe("gemini.js integration", () => {
+describe("integration", () => {
   test("basic text generation works", async () => {
     if (!process.env.GEMINI_API_KEY) {
       console.log("Skipping integration test: GEMINI_API_KEY not set");
@@ -81,20 +81,14 @@ describe("gemini.js integration", () => {
       return;
     }
 
-    const result = await runScript([
-      "--model=gemini-3-flash-preview",
-      "Reply with only the word: hello",
-    ]);
+    const result = await runScript(["--model=gemini-3-flash-preview", "Reply with only the word: hello"]);
 
     assert.strictEqual(result.code, 0);
-    assert.ok(
-      result.stdout.toLowerCase().includes("hello"),
-      `Expected "hello" in output, got: ${result.stdout}`
-    );
+    assert.ok(result.stdout.toLowerCase().includes("hello"), `Expected "hello" in output, got: ${result.stdout}`);
   });
 });
 
-describe("gemini.js video file handling", () => {
+describe("video file handling", () => {
   // Use real sample video files from tests/sample-files
   const smallVideoPath = path.join(sampleFilesDir, "small_video.mp4");
   const largeVideoPath = path.join(sampleFilesDir, "large_video.mp4");
@@ -111,17 +105,11 @@ describe("gemini.js video file handling", () => {
 
   test("accepts small video file with supported extension", async () => {
     // Without API key, should fail at API call stage (not file validation)
-    const result = await runScript(
-      [`--file=${smallVideoPath}`, "describe this video"],
-      { GEMINI_API_KEY: "" }
-    );
+    const result = await runScript([`--file=${smallVideoPath}`, "describe this video"], { GEMINI_API_KEY: "" });
 
     // Should fail due to missing API key, NOT due to file issues
     assert.strictEqual(result.code, 1);
-    assert.ok(
-      result.stderr.includes("GEMINI_API_KEY"),
-      "Should fail due to missing API key, not file validation"
-    );
+    assert.ok(result.stderr.includes("GEMINI_API_KEY"), "Should fail due to missing API key, not file validation");
   });
 
   test("small video file integration (inline data path)", async () => {
@@ -142,17 +130,11 @@ describe("gemini.js video file handling", () => {
 
   test("accepts large video file with supported extension", async () => {
     // Without API key, should fail at API call stage (not file validation)
-    const result = await runScript(
-      [`--file=${largeVideoPath}`, "describe this video"],
-      { GEMINI_API_KEY: "" }
-    );
+    const result = await runScript([`--file=${largeVideoPath}`, "describe this video"], { GEMINI_API_KEY: "" });
 
     // Should fail due to missing API key, NOT due to file issues
     assert.strictEqual(result.code, 1);
-    assert.ok(
-      result.stderr.includes("GEMINI_API_KEY"),
-      "Should fail due to missing API key, not file validation"
-    );
+    assert.ok(result.stderr.includes("GEMINI_API_KEY"), "Should fail due to missing API key, not file validation");
   });
 
   test("large video file integration (Files API upload path)", async () => {
@@ -172,7 +154,7 @@ describe("gemini.js video file handling", () => {
   });
 });
 
-describe("gemini.js YouTube video support", () => {
+describe("YouTube video support", () => {
   // Tests verify that --file accepts YouTube URLs and processes them correctly
 
   test("accepts YouTube URL via --file and processes video content", async () => {
@@ -191,9 +173,8 @@ describe("gemini.js YouTube video support", () => {
     // The response should contain information about the video content
     assert.strictEqual(result.code, 0, `Failed with: ${result.stderr}`);
     assert.ok(
-      result.stdout.toLowerCase().includes("rick") ||
-        result.stdout.toLowerCase().includes("astley"),
-      `YouTube video content not processed. Expected 'Rick Astley' in response.\nGot: ${result.stdout}`
+      result.stdout.toLowerCase().includes("rick") || result.stdout.toLowerCase().includes("astley"),
+      `YouTube video content not processed. Expected 'Rick Astley' in response.\nGot: ${result.stdout}`,
     );
   });
 
@@ -212,7 +193,7 @@ describe("gemini.js YouTube video support", () => {
     assert.ok(
       result.stdout.toLowerCase().includes("never gonna give you up") ||
         result.stdout.toLowerCase().includes("give you up"),
-      `Short YouTube URL not processed. Expected song title in response.\nGot: ${result.stdout}`
+      `Short YouTube URL not processed. Expected song title in response.\nGot: ${result.stdout}`,
     );
   });
 
@@ -229,10 +210,7 @@ describe("gemini.js YouTube video support", () => {
 
     // Should successfully process and return content about the video
     assert.strictEqual(result.code, 0, `Failed with: ${result.stderr}`);
-    assert.ok(
-      result.stdout.length > 10,
-      `Expected meaningful response about video content.\nGot: ${result.stdout}`
-    );
+    assert.ok(result.stdout.length > 10, `Expected meaningful response about video content.\nGot: ${result.stdout}`);
   });
 
   test("API rejects non-existent YouTube video", async () => {
@@ -242,10 +220,7 @@ describe("gemini.js YouTube video support", () => {
     }
 
     // Valid format but non-existent video - API should reject it
-    const result = await runScript([
-      "--file=https://www.youtube.com/watch?v=xxxxxxxxxxx",
-      "analyze this",
-    ]);
+    const result = await runScript(["--file=https://www.youtube.com/watch?v=xxxxxxxxxxx", "analyze this"]);
 
     // Should fail at API level for non-existent video
     assert.strictEqual(result.code, 1, `Expected API error for non-existent video`);
