@@ -1,6 +1,6 @@
 ---
 name: gemini
-description: Make a request to a Gemini model to answer a question, watch and analyze video files (both local and youtube), audio files (local and youtube), and generate images using the high-quality Nano Banana model. Use this skill when you need video understanding or top-tier image generation.
+description: Make a request to a Gemini AI model to answer a question, watch and analyze video files (both local and youtube), audio files (local and youtube), and generate images using the high-quality Nano Banana model. Use this skill when you need video understanding, top-tier image generation, or a second opinion from another frontier AI model.
 ---
 
 # Gemini: questions, video/audio/image/PDF analysis, and image generation
