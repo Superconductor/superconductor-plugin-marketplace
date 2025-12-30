@@ -10,3 +10,11 @@ Enables Claude Code to make requests to Gemini, GPT, and Grok models in order to
 - Understand videos
 - Generate images using nano banana
 - Process inputs of very long token lengths
+
+## Development
+
+### Running tests
+
+```bash
+make test
+```
