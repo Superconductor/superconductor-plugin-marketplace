@@ -1,0 +1,18 @@
+{
+  "name": "superconductor-plugin-marketplace",
+  "owner": {
+    "name": "Superconductor",
+    "url": "https://github.com/superconductor"
+  },
+  "metadata": {
+    "description": "Official Superconductor plugin marketplace for Claude Code and other agents",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "polyglot",
+      "description": "Enable Claude Code to use Gemini, GPT, and Grok models, which adds abilities such as being able to understand videos, generate images with nano banana, and more.",
+      "source": "./plugins/polyglot"
+    }
+  ]
+}
