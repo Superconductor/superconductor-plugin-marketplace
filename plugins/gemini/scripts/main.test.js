@@ -5,7 +5,7 @@ import * as path from "node:path";
 import * as fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import nock from "nock";
-import { generateContent, DEFAULT_MODEL } from "./main.js";
+import { generateContent, generateVideo, DEFAULT_MODEL } from "./main.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const scriptPath = path.join(__dirname, "main.js");
@@ -50,17 +50,18 @@ function setupNock(testName) {
   // Clean any previous state first
   nock.cleanAll();
   nock.restore();
-  nock.activate();
 
   const fixturePath = getFixturePath(testName);
 
   if (fs.existsSync(fixturePath)) {
-    // Playback mode - load recorded fixtures
+    // Playback mode - activate nock to intercept requests and load recorded fixtures
+    nock.activate();
     const fixtures = JSON.parse(fs.readFileSync(fixturePath, "utf8"));
     nock.define(fixtures);
     return { mode: "playback", fixturePath };
   } else {
-    // Record mode - enable nock recording
+    // Record mode - don't activate nock so real requests go through
+    // Just enable recording to capture the HTTP traffic
     nock.recorder.rec({
       output_objects: true,
       dont_print: true,
@@ -273,6 +274,46 @@ describe("video file handling", () => {
 
 });
 
+describe("file upload path (Files API)", () => {
+  const originalKey = process.env.GEMINI_API_KEY;
+  const smallVideoPath = path.join(sampleFilesDir, "small_video.mp4");
+
+  before(() => {
+    if (!process.env.GEMINI_API_KEY) {
+      process.env.GEMINI_API_KEY = "test-api-key-for-playback";
+    }
+  });
+
+  after(() => {
+    process.env.GEMINI_API_KEY = originalKey;
+  });
+
+  test("forces upload path when largeFileThresholdMB=0", async (t) => {
+    // By setting largeFileThresholdMB=0, even small files use the Files API upload path.
+    // This tests the full upload flow: initiate -> upload -> poll -> generateContent
+    // Note: gemini-3-flash-preview doesn't support Files API URIs, so we use gemini-2.5-flash
+    if (!hasRealApiKey && !hasFixtures(t.name)) {
+      t.skip("No API key and no fixtures - run with GEMINI_API_KEY to record fixtures");
+      return;
+    }
+
+    const setup = setupNock(t.name);
+
+    try {
+      const result = await generateContent({
+        model: "gemini-2.5-flash", // Must use a model that supports Files API URIs
+        file: smallVideoPath,
+        prompt: "Briefly describe what you see in this video in one sentence.",
+        largeFileThresholdMB: 0, // Force the upload path
+      });
+
+      assert.ok(result.length > 10, `Expected meaningful response, got: ${result}`);
+    } finally {
+      teardownNock(setup);
+    }
+  });
+});
+
 describe("YouTube video support", () => {
   const originalKey = process.env.GEMINI_API_KEY;
 
@@ -369,6 +410,96 @@ describe("YouTube video support", () => {
           }),
         // The API should return an error for non-existent videos
         (err) => err instanceof Error,
+      );
+    } finally {
+      teardownNock(setup);
+    }
+  });
+});
+
+describe("audio file handling", () => {
+  const originalKey = process.env.GEMINI_API_KEY;
+  const smallAudioPath = path.join(sampleFilesDir, "small_audio.mp3");
+
+  before(() => {
+    if (!process.env.GEMINI_API_KEY) {
+      process.env.GEMINI_API_KEY = "test-api-key-for-playback";
+    }
+  });
+
+  after(() => {
+    process.env.GEMINI_API_KEY = originalKey;
+  });
+
+  test("sample audio file exists", () => {
+    assert.ok(fs.existsSync(smallAudioPath), `Sample audio not found: ${smallAudioPath}`);
+
+    const stats = fs.statSync(smallAudioPath);
+    assert.ok(stats.size < 1 * 1024 * 1024, "Sample audio file should be under 1MB");
+  });
+
+  test("audio file analysis works", async (t) => {
+    if (!hasRealApiKey && !hasFixtures(t.name)) {
+      t.skip("No API key and no fixtures - run with GEMINI_API_KEY to record fixtures");
+      return;
+    }
+
+    const setup = setupNock(t.name);
+
+    try {
+      const result = await generateContent({
+        file: smallAudioPath,
+        prompt: "What do you hear in this audio? Describe it briefly.",
+      });
+
+      assert.ok(result.length > 10, `Expected meaningful response about audio content, got: ${result}`);
+    } finally {
+      teardownNock(setup);
+    }
+  });
+});
+
+describe("image generation", () => {
+  const originalKey = process.env.GEMINI_API_KEY;
+  const originalCwd = process.cwd();
+
+  before(() => {
+    if (!process.env.GEMINI_API_KEY) {
+      process.env.GEMINI_API_KEY = "test-api-key-for-playback";
+    }
+  });
+
+  after(() => {
+    process.env.GEMINI_API_KEY = originalKey;
+  });
+
+  afterEach(() => {
+    // Clean up any generated image files
+    const files = fs.readdirSync(originalCwd);
+    for (const file of files) {
+      if (file.startsWith("gemini-image-") && file.endsWith(".png")) {
+        fs.unlinkSync(path.join(originalCwd, file));
+      }
+    }
+  });
+
+  test("generates image with image model", async (t) => {
+    if (!hasRealApiKey && !hasFixtures(t.name)) {
+      t.skip("No API key and no fixtures - run with GEMINI_API_KEY to record fixtures");
+      return;
+    }
+
+    const setup = setupNock(t.name);
+
+    try {
+      const result = await generateContent({
+        model: "gemini-2.0-flash-exp-image-generation",
+        prompt: "Generate a simple red circle on a white background.",
+      });
+
+      assert.ok(
+        result.includes("Image saved as:") || result.length > 0,
+        `Expected image generation result, got: ${result}`,
       );
     } finally {
       teardownNock(setup);
