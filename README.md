@@ -43,7 +43,11 @@ This plugin adds several skills powered by Google Gemini and Veo AI models:
 ### Running Tests
 
 ```bash
+# Run tests using fixtures
 make test
+
+# Run tests without fixtures (make sure to have GEMINI_API_KEY set)
+make delete-fixtures && make test
 ```
 
 ### Tasks

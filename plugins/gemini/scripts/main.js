@@ -217,7 +217,7 @@ export async function generateVideo(options) {
       throw new Error("Video generation timed out after 10 minutes");
     }
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    operation = await ai.operations.get({ name: operation.name });
+    operation = await ai.operations.get({ operation });
   }
 
   // Download and save the video
@@ -233,8 +233,12 @@ export async function generateVideo(options) {
     throw new Error("No video URI in response");
   }
 
-  // Fetch the video data
-  const response = await fetch(videoUri);
+  // Fetch the video data (needs API key for Gemini API URLs)
+  const downloadUrl = new URL(videoUri);
+  if (downloadUrl.hostname.includes("generativelanguage.googleapis.com")) {
+    downloadUrl.searchParams.set("key", process.env.GEMINI_API_KEY);
+  }
+  const response = await fetch(downloadUrl.toString());
   if (!response.ok) {
     throw new Error(`Failed to download video: ${response.statusText}`);
   }

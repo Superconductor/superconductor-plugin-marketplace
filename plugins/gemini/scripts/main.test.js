@@ -86,6 +86,48 @@ function teardownNock(setupResult) {
   nock.cleanAll();
 }
 
+// Run async function with mocked timers for fast playback
+// In playback mode, HTTP responses are instant but setTimeout delays still run.
+// This helper mocks timers and advances them quickly.
+async function runWithFastTimers(t, setup, asyncFn) {
+  if (setup.mode !== "playback") {
+    // Record mode: use real timers
+    return asyncFn();
+  }
+
+  // Playback mode: mock timers and tick quickly
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+
+  let result;
+  let error;
+  let done = false;
+
+  const resultPromise = asyncFn()
+    .then((r) => {
+      result = r;
+      done = true;
+    })
+    .catch((e) => {
+      error = e;
+      done = true;
+    });
+
+  // Use setImmediate (not mocked) to periodically tick timers
+  const tickLoop = () => {
+    if (!done) {
+      t.mock.timers.tick(5000);
+      setImmediate(tickLoop);
+    }
+  };
+  setImmediate(tickLoop);
+
+  // Wait for the async function to complete
+  await resultPromise;
+
+  if (error) throw error;
+  return result;
+}
+
 describe("CLI validation", () => {
   test("shows error when GEMINI_API_KEY is not set", async () => {
     const result = await runScript(["test prompt"], { GEMINI_API_KEY: "" });
@@ -300,12 +342,14 @@ describe("file upload path (Files API)", () => {
     const setup = setupNock(t.name);
 
     try {
-      const result = await generateContent({
-        model: "gemini-2.5-flash", // Must use a model that supports Files API URIs
-        file: smallVideoPath,
-        prompt: "Briefly describe what you see in this video in one sentence.",
-        largeFileThresholdMB: 0, // Force the upload path
-      });
+      const result = await runWithFastTimers(t, setup, () =>
+        generateContent({
+          model: "gemini-2.5-flash", // Must use a model that supports Files API URIs
+          file: smallVideoPath,
+          prompt: "Briefly describe what you see in this video in one sentence.",
+          largeFileThresholdMB: 0, // Force the upload path
+        }),
+      );
 
       assert.ok(result.length > 10, `Expected meaningful response, got: ${result}`);
     } finally {
@@ -501,6 +545,67 @@ describe("image generation", () => {
         result.includes("Image saved as:") || result.length > 0,
         `Expected image generation result, got: ${result}`,
       );
+    } finally {
+      teardownNock(setup);
+    }
+  });
+});
+
+describe("video generation", () => {
+  const originalKey = process.env.GEMINI_API_KEY;
+  const originalCwd = process.cwd();
+
+  before(() => {
+    if (!process.env.GEMINI_API_KEY) {
+      process.env.GEMINI_API_KEY = "test-api-key-for-playback";
+    }
+  });
+
+  after(() => {
+    process.env.GEMINI_API_KEY = originalKey;
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+    // Clean up any generated video files
+    const files = fs.readdirSync(originalCwd);
+    for (const file of files) {
+      if (file.startsWith("gemini-video-") && file.endsWith(".mp4")) {
+        fs.unlinkSync(path.join(originalCwd, file));
+      }
+    }
+  });
+
+  test("generates video with Veo model", async (t) => {
+    // Video generation: start operation -> poll until done -> download video
+    // Note: Recording takes several minutes as real video generation is slow
+    if (!hasRealApiKey && !hasFixtures(t.name)) {
+      t.skip("No API key and no fixtures - run with GEMINI_API_KEY to record fixtures");
+      return;
+    }
+
+    const setup = setupNock(t.name);
+
+    // In playback mode, add a flexible matcher for the download request
+    // since the API key in the query string differs between recording and playback
+    if (setup.mode === "playback") {
+      nock("https://generativelanguage.googleapis.com")
+        .get(/\/v1beta\/files\/[^/]+:download/)
+        .query(true) // Match any query params (including different API keys)
+        .reply(200, Buffer.from("mock-video-data"), { "content-type": "video/mp4" });
+    }
+
+    try {
+      const result = await runWithFastTimers(t, setup, () =>
+        generateVideo({
+          model: "veo-3.1-generate-preview",
+          prompt: "A simple animation of a bouncing red ball on white background.",
+          duration: 4, // veo 3.1 supports 4-8 seconds
+          aspectRatio: "16:9",
+        }),
+      );
+
+      assert.ok(result.includes("Video saved as:"), `Expected video generation result, got: ${result}`);
     } finally {
       teardownNock(setup);
     }
