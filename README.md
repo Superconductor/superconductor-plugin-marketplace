@@ -14,6 +14,7 @@ This plugin adds several skills powered by Google Gemini and Veo AI models:
 - 🎧 **audio-understanding**: Transcribe and analyze audio content (local files and YouTube links)
 - 🎨 **image-generation**: Create high-quality images using the Nano Banana Pro model
 - 🎥 **video-generation**: Create short videos from text prompts using the Gemini Veo 3.1 model
+- 🗣️ **text-to-speech**: Convert text to natural-sounding speech with 30 voices and 24 languages
 - 🤖 **gemini-consultation**: Get a second opinion from another frontier AI, analyze PDFs and images
 
 > [!IMPORTANT]

@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "Gemini",
-      "description": "Provides several skills powered by Google Gemini: video-understanding (supporting local files and YouTube links), audio-understanding (supporting local files and YouTube links), image-generation (using Nano Banana Pro), video-generation (using Veo 3.1), and gemini-consultation (to get a second opinion from another frontier AI).",
+      "description": "Provides several skills powered by Google Gemini: video-understanding (supporting local files and YouTube links), audio-understanding (supporting local files and YouTube links), image-generation (using Nano Banana Pro), video-generation (using Veo 3.1), text-to-speech (with 30 voices and 24 languages), and gemini-consultation (to get a second opinion from another frontier AI).",
       "source": "./plugins/gemini"
     }
   ]
