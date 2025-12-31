@@ -1,8 +1,7 @@
-.PHONY: test test-record
+.PHONY: test delete-fixtures
 
 test:
 	npm test --prefix plugins/gemini/scripts
 
-test-record:
+delete-fixtures:
 	rm -rf plugins/gemini/scripts/fixtures
-	npm test --prefix plugins/gemini/scripts
