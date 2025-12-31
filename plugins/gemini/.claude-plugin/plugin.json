@@ -1,7 +1,7 @@
 {
   "name": "gemini",
-  "version": "0.1.0",
-  "description": "Enables the agent to make requests to Google Gemini AI models in order to: get a second opinion from another frontier AI model; watch and analyze video and audio (both local files and YouTube links); and generate high-quality images using Nano Banana Pro.",
+  "version": "1.0.0",
+  "description": "Provides several skills powered by Google Gemini: video-understanding (supporting local files and YouTube links), audio-understanding (same), image-generation (using Nano Banana Pro), video-generation (using Veo 3.1), and gemini-consultation (to get a second opinion from another frontier AI).",
   "author": {
     "name": "Superconductor Team",
     "email": "team@superconductor.dev"
@@ -9,15 +9,15 @@
   "homepage": "https://www.superconductor.dev",
   "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
   "keywords": [
-    "gemini",
-    "gpt",
-    "chatgpt",
-    "grok",
     "llm",
+    "gemini",
     "video",
+    "audio",
     "youtube",
     "long context",
     "image generation",
-    "nano banana"
+    "nano banana",
+    "video generation",
+    "veo"
   ]
 }

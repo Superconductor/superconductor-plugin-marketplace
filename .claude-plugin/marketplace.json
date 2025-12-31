@@ -6,12 +6,12 @@
   },
   "metadata": {
     "description": "Official Superconductor plugin marketplace for Claude Code and other agents.",
-    "version": "0.1.0"
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "Gemini",
-      "description": "Enables the agent to make requests to Google Gemini AI models in order to: get a second opinion from another frontier AI model; watch and analyze video and audio (both local files and YouTube links); and generate high-quality images using Nano Banana Pro.",
+      "description": "Provides several skills powered by Google Gemini: video-understanding (supporting local files and YouTube links), audio-understanding (same), image-generation (using Nano Banana Pro), video-generation (using Veo 3.1), and gemini-consultation (to get a second opinion from another frontier AI).",
       "source": "./plugins/gemini"
     }
   ]
