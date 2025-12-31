@@ -46,9 +46,8 @@ This plugin adds several skills powered by Google Gemini and Veo AI models:
 make test
 ```
 
-### Future Work
+### Tasks
 
-- [ ] Add GitHub CI to run the tests
 - [ ] Publish repo
 - [ ] Add plugin to https://claudemarketplaces.com and https://claude-plugins.dev
-- [ ] Potentially publish @superconductor/gemini as an NPM package (then the skill can just say `npx superconductor-gemini` instead of including all the code in the plugin)
+- [ ] Potentially publish `@superconductor/gemini` as an NPM package (then the skill can just say `npx superconductor-gemini` instead of including all the code in the plugin)
