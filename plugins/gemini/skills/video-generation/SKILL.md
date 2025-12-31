@@ -78,4 +78,3 @@ The `GEMINI_API_KEY` environment variable must be set. Get your key at: https://
 | `veo-3.1-generate-preview`      | Native audio, best quality  | Normal |
 | `veo-3.1-fast-generate-preview` | Native audio, faster        | Fast   |
 | `veo-3.0-generate-001`          | Audio support               | Normal |
-| `veo-2.0-generate-001`          | Silent video only           | Normal |
