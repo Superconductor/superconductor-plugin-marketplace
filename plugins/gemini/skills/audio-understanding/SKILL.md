@@ -55,3 +55,5 @@ The `GEMINI_API_KEY` environment variable must be set. Get your key at: https://
 | ------------------------ | -------------- | ---------------------------------- |
 | `gemini-3-pro-preview`   | 1M / 64k       | $2 / $12 (<200k), $4 / $18 (>200k) |
 | `gemini-3-flash-preview` | 1M / 64k       | $0.50 / $3                         |
+| `gemini-2.5-pro`         | 1M / 65k       | $1.25 / $10 (<200k), $2.50 / $15 (>200k) |
+| `gemini-2.5-flash`       | 1M / 65k       | $0.30 / $2.50                            |

@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 export const DEFAULT_MODEL = "gemini-3-flash-preview";
 const IMAGE_MODELS = ["gemini-3-pro-image-preview", "gemini-2.5-flash-image"];
 const VIDEO_MODELS = ["veo-3.1-generate-preview", "veo-3.1-fast-generate-preview", "veo-3.0-generate-001", "veo-2.0-generate-001"];
+const TTS_MODELS = ["gemini-2.5-flash-preview-tts", "gemini-2.5-pro-preview-tts"];
 
 const MIME_TYPES = {
   // Video
@@ -39,6 +40,7 @@ function parseArgs(args) {
     prompt: [],
     aspectRatio: "16:9",
     duration: 8,
+    voice: "Kore",
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -51,6 +53,8 @@ function parseArgs(args) {
       result.aspectRatio = arg.slice("--aspect-ratio=".length);
     } else if (arg.startsWith("--duration=")) {
       result.duration = parseInt(arg.slice("--duration=".length), 10);
+    } else if (arg.startsWith("--voice=")) {
+      result.voice = arg.slice("--voice=".length);
     } else if (arg === "--model" && i + 1 < args.length) {
       result.model = args[++i];
     } else if (arg === "--file" && i + 1 < args.length) {
@@ -59,6 +63,8 @@ function parseArgs(args) {
       result.aspectRatio = args[++i];
     } else if (arg === "--duration" && i + 1 < args.length) {
       result.duration = parseInt(args[++i], 10);
+    } else if (arg === "--voice" && i + 1 < args.length) {
+      result.voice = args[++i];
     } else if (!arg.startsWith("--")) {
       result.prompt.push(arg);
     }
@@ -252,6 +258,103 @@ export async function generateVideo(options) {
 }
 
 /**
+ * Write WAV header for PCM audio data
+ * @param {number} dataLength - Length of PCM data in bytes
+ * @param {number} sampleRate - Sample rate in Hz
+ * @param {number} numChannels - Number of audio channels
+ * @param {number} bitsPerSample - Bits per sample
+ * @returns {Buffer} WAV header buffer
+ */
+function createWavHeader(dataLength, sampleRate = 24000, numChannels = 1, bitsPerSample = 16) {
+  const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+  const blockAlign = numChannels * (bitsPerSample / 8);
+  const header = Buffer.alloc(44);
+
+  // RIFF header
+  header.write("RIFF", 0);
+  header.writeUInt32LE(36 + dataLength, 4); // File size - 8
+  header.write("WAVE", 8);
+
+  // fmt subchunk
+  header.write("fmt ", 12);
+  header.writeUInt32LE(16, 16); // Subchunk1 size (16 for PCM)
+  header.writeUInt16LE(1, 20); // Audio format (1 = PCM)
+  header.writeUInt16LE(numChannels, 22);
+  header.writeUInt32LE(sampleRate, 24);
+  header.writeUInt32LE(byteRate, 28);
+  header.writeUInt16LE(blockAlign, 32);
+  header.writeUInt16LE(bitsPerSample, 34);
+
+  // data subchunk
+  header.write("data", 36);
+  header.writeUInt32LE(dataLength, 40);
+
+  return header;
+}
+
+/**
+ * Generate speech audio using Gemini TTS models
+ * @param {Object} options
+ * @param {string} options.text - The text to convert to speech
+ * @param {string} options.model - TTS model to use
+ * @param {string} [options.voice] - Voice name (default: "Kore")
+ * @returns {Promise<string>} Path to saved audio file
+ */
+export async function generateSpeech(options) {
+  const { text, model, voice = "Kore" } = options;
+
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY environment variable is not set");
+  }
+
+  if (!text) {
+    throw new Error("No text provided");
+  }
+
+  const ai = new GoogleGenAI({});
+
+  const response = await ai.models.generateContent({
+    model,
+    contents: [{ parts: [{ text }] }],
+    config: {
+      responseModalities: ["AUDIO"],
+      speechConfig: {
+        voiceConfig: {
+          prebuiltVoiceConfig: { voiceName: voice },
+        },
+      },
+    },
+  });
+
+  // Extract audio data from response
+  const parts = response.candidates?.[0]?.content?.parts || [];
+  let audioData = null;
+
+  for (const part of parts) {
+    if (part.inlineData && part.inlineData.mimeType?.startsWith("audio/")) {
+      audioData = part.inlineData.data;
+      break;
+    }
+  }
+
+  if (!audioData) {
+    throw new Error("No audio was generated");
+  }
+
+  // Convert base64 PCM data to buffer
+  const pcmBuffer = Buffer.from(audioData, "base64");
+
+  // Create WAV file with header (24kHz, mono, 16-bit)
+  const wavHeader = createWavHeader(pcmBuffer.length, 24000, 1, 16);
+  const wavBuffer = Buffer.concat([wavHeader, pcmBuffer]);
+
+  const filename = `gemini-speech-${Date.now()}.wav`;
+  fs.writeFileSync(filename, wavBuffer);
+
+  return `Audio saved as: ${filename}`;
+}
+
+/**
  * Generate content using Gemini API
  * @param {Object} options
  * @param {string} options.prompt - The text prompt
@@ -358,13 +461,15 @@ async function main() {
         "  --model         Model to use (default: gemini-3-flash-preview)\n" +
         "  --file          Local file path or YouTube URL\n" +
         "  --aspect-ratio  Video aspect ratio: 16:9 or 9:16 (video only)\n" +
-        "  --duration      Video duration: 4, 6, or 8 seconds (video only)",
+        "  --duration      Video duration: 4, 6, or 8 seconds (video only)\n" +
+        "  --voice         Voice name for TTS (default: Kore)",
     );
     process.exit(1);
   }
 
   try {
     const isVideoModel = VIDEO_MODELS.some((m) => args.model.includes(m) || args.model.includes("veo"));
+    const isTtsModel = TTS_MODELS.some((m) => args.model.includes(m) || args.model.includes("-tts"));
 
     let result;
     if (isVideoModel) {
@@ -374,6 +479,12 @@ async function main() {
         file: args.file,
         aspectRatio: args.aspectRatio,
         duration: args.duration,
+      });
+    } else if (isTtsModel) {
+      result = await generateSpeech({
+        text: args.prompt,
+        model: args.model,
+        voice: args.voice,
       });
     } else {
       result = await generateContent({
