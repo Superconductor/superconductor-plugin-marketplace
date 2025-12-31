@@ -5,7 +5,7 @@ import * as path from "node:path";
 import * as fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import nock from "nock";
-import { generateContent, generateVideo, DEFAULT_MODEL } from "./main.js";
+import { generateContent, generateVideo, generateSpeech, DEFAULT_MODEL } from "./main.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const scriptPath = path.join(__dirname, "main.js");
@@ -606,6 +606,82 @@ describe("video generation", () => {
       );
 
       assert.ok(result.includes("Video saved as:"), `Expected video generation result, got: ${result}`);
+    } finally {
+      teardownNock(setup);
+    }
+  });
+});
+
+describe("generateSpeech function validation", () => {
+  test("throws when GEMINI_API_KEY is not set", async () => {
+    const originalKey = process.env.GEMINI_API_KEY;
+    process.env.GEMINI_API_KEY = "";
+
+    try {
+      await assert.rejects(
+        () => generateSpeech({ text: "test", model: "gemini-2.5-flash-preview-tts" }),
+        /GEMINI_API_KEY environment variable is not set/,
+      );
+    } finally {
+      process.env.GEMINI_API_KEY = originalKey;
+    }
+  });
+
+  test("throws when no text is provided", async () => {
+    const originalKey = process.env.GEMINI_API_KEY;
+    process.env.GEMINI_API_KEY = "test-key";
+
+    try {
+      await assert.rejects(
+        () => generateSpeech({ model: "gemini-2.5-flash-preview-tts" }),
+        /No text provided/,
+      );
+    } finally {
+      process.env.GEMINI_API_KEY = originalKey;
+    }
+  });
+});
+
+describe("text-to-speech generation", () => {
+  const originalKey = process.env.GEMINI_API_KEY;
+  const originalCwd = process.cwd();
+
+  before(() => {
+    if (!process.env.GEMINI_API_KEY) {
+      process.env.GEMINI_API_KEY = "test-api-key-for-playback";
+    }
+  });
+
+  after(() => {
+    process.env.GEMINI_API_KEY = originalKey;
+  });
+
+  afterEach(() => {
+    // Clean up any generated audio files
+    const files = fs.readdirSync(originalCwd);
+    for (const file of files) {
+      if (file.startsWith("gemini-speech-") && file.endsWith(".wav")) {
+        fs.unlinkSync(path.join(originalCwd, file));
+      }
+    }
+  });
+
+  test("generates speech with TTS model", async (t) => {
+    if (!hasRealApiKey && !hasFixtures(t.name)) {
+      t.skip("No API key and no fixtures - run with GEMINI_API_KEY to record fixtures");
+      return;
+    }
+
+    const setup = setupNock(t.name);
+
+    try {
+      const result = await generateSpeech({
+        model: "gemini-2.5-flash-preview-tts",
+        text: "Say: Hello, welcome to our application. Have a great day!",
+        voice: "Kore",
+      });
+
+      assert.ok(result.includes("Audio saved as:"), `Expected speech generation result, got: ${result}`);
     } finally {
       teardownNock(setup);
     }
