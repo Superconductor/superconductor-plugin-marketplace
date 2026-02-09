@@ -2,7 +2,7 @@
   "name": "superconductor-plugin-marketplace",
   "owner": {
     "name": "Superconductor Team",
-    "email": "team@superconductor.dev"
+    "email": "team@superconductor.com"
   },
   "metadata": {
     "description": "Official Superconductor plugin marketplace for Claude Code and other agents.",

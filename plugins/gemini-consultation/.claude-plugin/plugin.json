@@ -4,9 +4,9 @@
   "description": "Get a second opinion from Google Gemini AI. Useful for analyzing documents (PDFs up to 50MB), images, or getting Gemini's perspective on any topic.",
   "author": {
     "name": "Superconductor Team",
-    "email": "team@superconductor.dev"
+    "email": "team@superconductor.com"
   },
-  "homepage": "https://www.superconductor.dev",
+  "homepage": "https://www.superconductor.com",
   "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
   "keywords": ["gemini", "consultation", "pdf", "documents", "second-opinion"]
 }

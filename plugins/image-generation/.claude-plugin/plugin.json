@@ -4,9 +4,9 @@
   "description": "Generate high-quality images from text descriptions using Google Gemini's image models. Can also use existing images or videos as reference for style guidance.",
   "author": {
     "name": "Superconductor Team",
-    "email": "team@superconductor.dev"
+    "email": "team@superconductor.com"
   },
-  "homepage": "https://www.superconductor.dev",
+  "homepage": "https://www.superconductor.com",
   "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
   "keywords": ["image", "generation", "gemini", "art", "creative"]
 }
