@@ -2,7 +2,7 @@
 
 A set of plugins to enhance Claude Code and other agents with various capabilities, such as video understanding, image generation, and more.
 
-Developed by the [superconductor.dev](https://superconductor.dev) team. We help you build software with AI agents.
+Developed by the [superconductor.com](https://superconductor.com) team. We help you build software with AI agents.
 
 ## Plugins
 
