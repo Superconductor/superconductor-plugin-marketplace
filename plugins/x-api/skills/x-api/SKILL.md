@@ -20,6 +20,8 @@ curl "<endpoint_url>" \
   -H "Authorization: Bearer $X_BEARER_TOKEN"
 ```
 
+For any endpoint that returns tweets, always include `note_tweet` in `tweet.fields` so long posts return full content.
+
 ## Examples
 
 ### Get a user profile
@@ -41,16 +43,16 @@ Common `user.fields`: `created_at`, `description`, `entities`, `id`, `location`,
 ### Look up a post by ID
 
 ```bash
-curl "https://api.x.com/2/tweets/1460323737035677698?tweet.fields=created_at,public_metrics" \
+curl "https://api.x.com/2/tweets/1460323737035677698?tweet.fields=note_tweet,created_at,public_metrics" \
   -H "Authorization: Bearer $X_BEARER_TOKEN"
 ```
 
-Common `tweet.fields`: `attachments`, `author_id`, `conversation_id`, `created_at`, `entities`, `id`, `in_reply_to_user_id`, `lang`, `public_metrics`, `referenced_tweets`, `source`, `text`, `withheld`.
+Common `tweet.fields`: `note_tweet`, `attachments`, `author_id`, `conversation_id`, `created_at`, `entities`, `id`, `in_reply_to_user_id`, `lang`, `public_metrics`, `referenced_tweets`, `source`, `text`, `withheld`.
 
 ### Search recent posts
 
 ```bash
-curl "https://api.x.com/2/tweets/search/recent?query=from:xdevelopers&tweet.fields=created_at" \
+curl "https://api.x.com/2/tweets/search/recent?query=from:xdevelopers&tweet.fields=note_tweet,created_at" \
   -H "Authorization: Bearer $X_BEARER_TOKEN"
 ```
 
@@ -68,16 +70,16 @@ The `query` parameter supports the full X search query syntax. Examples:
 ### Get a user's posts
 
 ```bash
-curl "https://api.x.com/2/users/2244994945/tweets?max_results=5" \
+curl "https://api.x.com/2/users/2244994945/tweets?max_results=5&tweet.fields=note_tweet" \
   -H "Authorization: Bearer $X_BEARER_TOKEN"
 ```
 
-You can add `tweet.fields`, `max_results` (5-100), and pagination tokens to customize the response.
+You can add more `tweet.fields`, `max_results` (5-100), and pagination tokens to customize the response, but always keep `note_tweet` included.
 
 ### Get a user's mentions
 
 ```bash
-curl "https://api.x.com/2/users/2244994945/mentions?max_results=5&tweet.fields=created_at,author_id" \
+curl "https://api.x.com/2/users/2244994945/mentions?max_results=5&tweet.fields=note_tweet,created_at,author_id" \
   -H "Authorization: Bearer $X_BEARER_TOKEN"
 ```
 
