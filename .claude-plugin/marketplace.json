@@ -38,6 +38,11 @@
       "name": "gemini-consultation",
       "description": "Get a second opinion from Google Gemini AI. Useful for analyzing documents (PDFs up to 50MB), images, or getting Gemini's perspective on any topic.",
       "source": "./plugins/gemini-consultation"
+    },
+    {
+      "name": "x-api",
+      "description": "Interact with the X (Twitter) API v2 using curl commands. Look up user profiles, search posts, retrieve tweets, and more — all using Bearer Token authentication.",
+      "source": "./plugins/x-api"
     }
   ]
 }
