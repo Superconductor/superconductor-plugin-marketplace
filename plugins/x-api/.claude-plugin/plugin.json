@@ -1,0 +1,12 @@
+{
+  "name": "x-api",
+  "version": "1.0.0",
+  "description": "Interact with the X (Twitter) API v2 using curl commands. Look up user profiles, search posts, retrieve tweets, and more — all using Bearer Token authentication.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.com"
+  },
+  "homepage": "https://www.superconductor.com",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["x", "twitter", "api", "social-media", "tweets", "posts", "curl"]
+}

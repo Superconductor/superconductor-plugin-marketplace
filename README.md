@@ -1,14 +1,15 @@
 # Superconductor Plugin Marketplace
 
-A set of plugins to enhance Claude Code and other agents with various capabilities, such as video understanding, image generation, and more.
+A set of plugins to enhance Claude Code and other agents with various capabilities, such as video understanding, image generation, X API access, and more.
 
 Developed by the [superconductor.com](https://superconductor.com) team. We help you build software with AI agents.
 
 ## Plugins
 
 > [!IMPORTANT]
-> For all of these plugins to work, you need to have `GEMINI_API_KEY` environment variable set.
+> For Gemini-based plugins to work, you need to have `GEMINI_API_KEY` environment variable set.
 > You can get it by following [these instructions](https://ai.google.dev/gemini-api/docs/api-key).
+> For the X API plugin, you need `X_BEARER_TOKEN` set instead (see [X Developer Portal](https://developer.x.com/en/portal/dashboard)).
 
 These plugins use our [Gemini Skills](https://github.com/superconductor/gemini-skills) CLI.
 
@@ -36,6 +37,10 @@ Convert text to natural-sounding speech using Google Gemini TTS models. Supports
 
 Get a second opinion on anything from Google Gemini AI. Also useful for analyzing documents (PDFs up to 50MB) and images.
 
+### 𝕏 X API
+
+Interact with the X (Twitter) API v2 using curl commands. Look up user profiles, search posts, retrieve tweets, and more — all using Bearer Token authentication. Requires the `X_BEARER_TOKEN` environment variable.
+
 ## Quick Start
 
 Run Claude and add the marketplace:
@@ -53,6 +58,7 @@ Then install the plugins you want:
 /plugin install video-generation
 /plugin install text-to-speech
 /plugin install gemini-consultation
+/plugin install x-api
 ```
 
 **YOU MUST RELOAD CLAUDE CODE TO LOAD THE PLUGINS.**
