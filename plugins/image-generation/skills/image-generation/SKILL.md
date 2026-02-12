@@ -19,6 +19,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/gemini.sh --model=gemini-3-pro-image-preview 
 
 - `--model` - Required for image generation: Use `gemini-3-pro-image-preview`
 - `--file` - Optional: Reference image or video for style/content guidance
+  - When relevant, explicitly ask the model to include or preserve the original image/composition in the output.
 
 **Examples:**
 
@@ -28,6 +29,9 @@ npx -y superconductor-gemini-skills --model=gemini-3-pro-image-preview "A serene
 
 # Generate an image inspired by an existing image
 npx -y superconductor-gemini-skills --model=gemini-3-pro-image-preview --file=reference.jpg "Transform this into a watercolor painting"
+
+# Keep the original composition while applying a new style
+npx -y superconductor-gemini-skills --model=gemini-3-pro-image-preview --file=reference.jpg "Keep the original image composition and main subjects, but restyle it as a polished dark-mode mobile app mockup"
 
 # Generate an image from a video
 npx -y superconductor-gemini-skills --model=gemini-3-pro-image-preview --file=video.mp4 "Generate an image that captures the essence of this video"
