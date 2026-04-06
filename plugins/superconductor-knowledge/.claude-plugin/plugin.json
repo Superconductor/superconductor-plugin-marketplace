@@ -1,0 +1,12 @@
+{
+  "name": "superconductor-knowledge",
+  "version": "1.0.0",
+  "description": "Learn how Superconductor works by reading the full Superconductor docs bundle for LLMs.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.com"
+  },
+  "homepage": "https://www.superconductor.com",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["superconductor", "docs", "knowledge", "llm", "reference"]
+}

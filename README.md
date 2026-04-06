@@ -37,6 +37,10 @@ Convert text to natural-sounding speech using Google Gemini TTS models. Supports
 
 Get a second opinion on anything from Google Gemini AI. Also useful for analyzing documents (PDFs up to 50MB) and images.
 
+### ⚡ Superconductor Knowledge
+
+Learn how Superconductor works by reading the full LLM-oriented docs bundle at `superconductor.com/docs/llms-full.txt`.
+
 ### 𝕏 X API
 
 Interact with the X (Twitter) API v2 using curl commands. Look up user profiles, search posts, retrieve tweets, and more — all using Bearer Token authentication. Requires the `X_BEARER_TOKEN` environment variable.
@@ -58,6 +62,7 @@ Then install the plugins you want:
 /plugin install video-generation
 /plugin install text-to-speech
 /plugin install gemini-consultation
+/plugin install superconductor-knowledge
 /plugin install x-api
 ```
 
