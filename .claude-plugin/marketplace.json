@@ -43,6 +43,11 @@
       "name": "x-api",
       "description": "Interact with the X (Twitter) API v2 using curl commands. Look up user profiles, search posts, retrieve tweets, and more — all using Bearer Token authentication.",
       "source": "./plugins/x-api"
+    },
+    {
+      "name": "superconductor-artifacts",
+      "description": "How to share visual content (screenshots, images, videos, diagrams) with the user when running inside Superconductor.",
+      "source": "./plugins/superconductor-artifacts"
     }
   ]
 }

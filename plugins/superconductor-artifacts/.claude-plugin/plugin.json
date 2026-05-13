@@ -1,0 +1,12 @@
+{
+  "name": "superconductor-artifacts",
+  "version": "1.0.0",
+  "description": "How to share visual content (screenshots, images, videos, diagrams) with the user when running inside Superconductor.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.com"
+  },
+  "homepage": "https://www.superconductor.com",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["superconductor", "artifacts", "screenshots", "playwright"]
+}
