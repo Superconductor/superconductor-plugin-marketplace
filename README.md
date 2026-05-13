@@ -45,6 +45,10 @@ Learn how Superconductor works by reading the full LLM-oriented docs bundle at `
 
 Interact with the X (Twitter) API v2 using curl commands. Look up user profiles, search posts, retrieve tweets, and more — all using Bearer Token authentication. Requires the `X_BEARER_TOKEN` environment variable.
 
+### 🖼️ Superconductor Artifacts
+
+Teaches agents how to share visual content (screenshots, images, videos, diagrams) with the user when running inside Superconductor.
+
 ## Quick Start
 
 Run Claude and add the marketplace:
@@ -64,6 +68,7 @@ Then install the plugins you want:
 /plugin install gemini-consultation
 /plugin install superconductor-knowledge
 /plugin install x-api
+/plugin install superconductor-artifacts
 ```
 
 **YOU MUST RELOAD CLAUDE CODE TO LOAD THE PLUGINS.**
