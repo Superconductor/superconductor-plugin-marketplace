@@ -45,6 +45,10 @@ Learn how Superconductor works by reading the full LLM-oriented docs bundle at `
 
 Interact with the X (Twitter) API v2 using curl commands. Look up user profiles, search posts, retrieve tweets, and more — all using Bearer Token authentication. Requires the `X_BEARER_TOKEN` environment variable.
 
+### 📝 Granola
+
+Search and read your public Granola meeting notes using curl commands. List recent meetings, fetch note summaries, transcripts, attendees, and folders. Requires the `GRANOLA_API_KEY` environment variable set to a [Granola public-notes API key](https://docs.granola.ai/introduction).
+
 ## Quick Start
 
 Run Claude and add the marketplace:
@@ -64,6 +68,7 @@ Then install the plugins you want:
 /plugin install gemini-consultation
 /plugin install superconductor-knowledge
 /plugin install x-api
+/plugin install granola
 ```
 
 **YOU MUST RELOAD CLAUDE CODE TO LOAD THE PLUGINS.**

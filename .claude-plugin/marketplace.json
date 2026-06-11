@@ -43,6 +43,11 @@
       "name": "x-api",
       "description": "Interact with the X (Twitter) API v2 using curl commands. Look up user profiles, search posts, retrieve tweets, and more — all using Bearer Token authentication.",
       "source": "./plugins/x-api"
+    },
+    {
+      "name": "granola",
+      "description": "Search and read your public Granola meeting notes using curl commands. List recent meetings, fetch note summaries, transcripts, attendees, and folders — all using Bearer Token authentication.",
+      "source": "./plugins/granola"
     }
   ]
 }
