@@ -1,0 +1,12 @@
+{
+  "name": "granola",
+  "version": "1.0.0",
+  "description": "Search and read your public Granola meeting notes using curl commands. List recent meetings, fetch note summaries, transcripts, attendees, and folders — all using Bearer Token authentication.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.com"
+  },
+  "homepage": "https://www.superconductor.com",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["granola", "meetings", "notes", "transcripts", "api", "curl"]
+}
