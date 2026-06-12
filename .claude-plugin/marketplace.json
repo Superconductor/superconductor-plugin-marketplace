@@ -48,6 +48,11 @@
       "name": "granola",
       "description": "Search and read your public Granola meeting notes using curl commands. List recent meetings, fetch note summaries, transcripts, attendees, and folders — all using Bearer Token authentication.",
       "source": "./plugins/granola"
+    },
+    {
+      "name": "notion",
+      "description": "Search, read, and create pages in your Notion workspace using curl commands. Find pages and databases, read page content, create new pages, and append content — all using Bearer Token authentication.",
+      "source": "./plugins/notion"
     }
   ]
 }

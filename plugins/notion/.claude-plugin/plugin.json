@@ -1,0 +1,12 @@
+{
+  "name": "notion",
+  "version": "1.0.0",
+  "description": "Search, read, and create pages in your Notion workspace using curl commands. Find pages and databases, read page content, create new pages, and append content — all using Bearer Token authentication.",
+  "author": {
+    "name": "Superconductor Team",
+    "email": "team@superconductor.com"
+  },
+  "homepage": "https://www.superconductor.com",
+  "repository": "https://github.com/superconductor/superconductor-plugin-marketplace",
+  "keywords": ["notion", "pages", "databases", "docs", "notes", "api", "curl"]
+}
