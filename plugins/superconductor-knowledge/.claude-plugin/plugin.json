@@ -1,7 +1,7 @@
 {
   "name": "superconductor-knowledge",
   "version": "1.0.0",
-  "description": "Learn how Superconductor works by reading the full Superconductor docs bundle for LLMs.",
+  "description": "Learn how Superconductor works by reading the Superconductor docs for LLMs.",
   "author": {
     "name": "Superconductor Team",
     "email": "team@superconductor.com"
