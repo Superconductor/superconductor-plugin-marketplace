@@ -39,7 +39,7 @@ Get a second opinion on anything from Google Gemini AI. Also useful for analyzin
 
 ### ⚡ Superconductor Knowledge
 
-Learn how Superconductor works by reading the full LLM-oriented docs bundle at `superconductor.com/docs/llms-full.txt`.
+Learn how Superconductor works by reading the LLM-oriented docs: the page index at `superconductor.com/docs/llms.txt` and the Markdown version of each page it lists.
 
 ### 𝕏 X API
 
